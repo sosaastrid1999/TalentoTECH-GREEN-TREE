@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora solar</title>
+</head>
+<body>
+    <style>
+         body {
+        display: block;
+        justify-content:center; 
+        align-items: center; 
+        height: 100vh; 
+        margin: 0; 
+        background: linear-gradient(to bottom, #bcf8d0, #79da89, #43f57e);
+        }
+    h1{
+        font-family: 'george';
+    }
+    </style>
+    <center>
+     <h1>Calculadora solar</h1>
+    <center>
+    <nav>
+        <ul>
+            <a href="pagprincipal.html">Inicio</a>
+            <a href="Npaneles.html">calculadora</a>
+        </ul>
+    </nav> 
+</center>
+    <form id="formulario">
+        <label for="datosUsuariokw">Consumo del mes en kw:</label>
+        <input type="number" id="datosUsuariokw" value="0">
+        <br><br>
+
+        <button type="button" onclick="calculo()">Calcular</button>
+
+        <br><br>
+
+        <h3>Resultado en porcentaje anual: <span id="resul" > % 0</span></h3>
+
+    
+        <p id="error-message" style="color: red; display: none;">Por favor ingrese valores válidos.</p>
+        <br><br>
+    </form>
+
+    <script>
+        function calculo() {
+            var datosUsuariokw = parseFloat(document.getElementById("datosUsuariokw").value);
+
+            if (isNaN(datosUsuariokw)) {
+                document.getElementById("error-message").style.display = "block"; 
+                document.getElementById("resul").textContent = "0"; 
+                return;
+            }
+
+            
+            document.getElementById("error-message").style.display = "none";
+           
+            var valorConsumotw = (datosUsuariokw / 100000000) * 12;
+
+            var resul = (valorConsumotw * 100) / 0.32;
+
+            document.getElementById("resul").textContent=resul;
+        }
+    </script>
+    </center>
+</body>
+</html>
