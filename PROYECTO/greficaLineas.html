@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualización de Datos Energéticos</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e3f2fd;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #0d47a1;
+        }
+
+        h1 {
+            color: #1976d2;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        button, select {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #42a5f5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover, select:hover {
+            background-color: #1e88e5;
+        }
+
+        canvas {
+            max-width: 90%;
+            max-height: 450px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-container {
+            width: 90%;
+            max-width: 850px;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <a href="pagprincipal.html">Inicio</a>
+            <a href="greficaBarraesteban.html">Grafico barra</a>
+            <a href="greficaLineas.html">Grafica linea</a>                   
+            <a href="greficaTorta.html">Grafica torta</a>
+        </ul>
+    </nav> 
+
+    <div class="chart-container">
+        <h1>Tendencias de Consumo Energético</h1>
+
+        <button onclick="obtenerDatosCSV()">Cargar Información</button>
+
+        <label for="filtroPais">Selecciona un país:</label>
+        <select id="filtroPais" onchange="mostrarGrafico()">
+            <option value="">Escoge un país</option>
+        </select>
+
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <script>
+        let datosGlobales = [];
+        let paisesUnicos = [];
+        let graficoLinea = null;
+
+        function analizarCSV(contenido) {
+            const filas = contenido.split('\n');
+            const datosProcesados = [];
+
+            filas.forEach((fila, indice) => {
+                if (indice === 0) return;
+                const columnas = fila.split(',');
+                if (columnas.length === 4) {
+                    datosProcesados.push({
+                        paisNombre: columnas[0],
+                        codigoISO: columnas[1],
+                        fecha: columnas[2],
+                        consumoEnergetico: parseFloat(columnas[3])
+                    });
+                }
+            });
+            return datosProcesados;
+        }
+
+        function actualizarSelectorPaises() {
+            const selector = document.getElementById('filtroPais');
+            selector.innerHTML = '<option value="">Escoge un país</option>';
+
+            paisesUnicos.forEach(pais => {
+                const opcion = document.createElement('option');
+                opcion.value = pais;
+                opcion.textContent = pais;
+                selector.appendChild(opcion);
+            });
+        }
+
+        function construirGrafico(paisSeleccionado) {
+            const datosPais = datosGlobales.filter(item => item.paisNombre === paisSeleccionado).sort((a, b) => a.fecha - b.fecha);
+
+            if (datosPais.length === 0) {
+                alert('No hay datos disponibles para el país seleccionado.');
+                return;
+            }
+
+            const fechas = datosPais.map(item => item.fecha);
+            const consumos = datosPais.map(item => item.consumoEnergetico);
+
+            if (graficoLinea) {
+                graficoLinea.destroy();
+            }
+
+            const contexto = document.getElementById('lineChart').getContext('2d');
+            graficoLinea = new Chart(contexto, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [{
+                        label: 'Uso de Energía (MWh)',
+                        data: consumos,
+                        backgroundColor: 'rgba(33, 150, 243, 0.3)',
+                        borderColor: '#1976d2',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Año'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Consumo (MWh)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function obtenerDatosCSV() {
+            fetch('graficoArea.csv')
+                .then(respuesta => respuesta.text())
+                .then(texto => {
+                    datosGlobales = analizarCSV(texto);
+                    paisesUnicos = [...new Set(datosGlobales.map(item => item.paisNombre))];
+                    actualizarSelectorPaises();
+                })
+                .catch(error => {
+                    console.error('Error al cargar el archivo CSV:', error);
+                    alert('No se pudo cargar el archivo CSV.');
+                });
+        }
+
+        function mostrarGrafico() {
+            const paisSeleccionado = document.getElementById('filtroPais').value;
+            if (paisSeleccionado) {
+                construirGrafico(paisSeleccionado);
+            }
+        }
+    </script>
+</body>
+</html>

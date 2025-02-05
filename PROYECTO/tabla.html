@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de datos globales, energia solar</title>
+    <link rel="stylesheet" href="tabla.css">
+</head>
+<body>
+    <section id="avance">
+        <h2>Tabla de datos históricos globales sobre el consumo de energia solar en diferentes años</h2><br>
+        <nav>
+            <ul>
+                <h3><a href="pagprincipal.html">Inicio</a></h3>
+            </ul>
+        </nav> 
+        <button onclick="cargarArchivo('/PROYECTO/12 solar-energy-consumption.csv')">Cargar tabla</button>
+        <div class="tabla-container">
+            <select id="filtroPais">
+                <option value="">Todos</option>
+            </select>
+            <table id="tabla">
+                <thead>
+                    <tr>
+                        <th>PAIS</th>
+                        <th>CODIGO</th>
+                        <th>AÑO</th>
+                        <th>CONSUMO EN TWh</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    <script src="tabla.js"></script>
+    </section>
+    
+</body>
+</html>
+
+
+

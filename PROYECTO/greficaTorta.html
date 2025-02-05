@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribución de Consumo Energético</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3e5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #6a1b9a;
+        }
+
+        h1 {
+            color: #8e24aa;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        button, select {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #ab47bc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px;
+        }
+
+        button:hover, select:hover {
+            background-color: #8e24aa;
+        }
+
+        canvas {
+            max-width: 90%;
+            max-height: 450px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-container {
+            width: 90%;
+            max-width: 850px;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <a href="pagprincipal.html">Inicio</a>
+            <a href="greficaBarraesteban.html">Grafico barra</a>
+            <a href="greficaLineas.html">Grafica linea</a>                   
+            <a href="greficaTorta.html">Grafica torta</a>
+        </ul>
+    </nav> 
+
+    <div class="chart-container">
+        <h1>Distribución del Uso Energético</h1>
+
+        <button onclick="obtenerDatosCSV()">Cargar Información</button>
+
+        <label for="filtroRegion">Selecciona una región:</label>
+        <select id="filtroRegion" onchange="mostrarGrafico()">
+            <option value="">Escoge una región</option>
+        </select>
+
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <script>
+        let datosTotales = [];
+        let regionesUnicas = [];
+        let graficoTorta = null;
+
+        function analizarCSV(contenido) {
+            const filas = contenido.split('\n');
+            const datosProcesados = [];
+
+            filas.forEach((fila, indice) => {
+                if (indice === 0) return;
+                const columnas = fila.split(',');
+                if (columnas.length === 4) {
+                    datosProcesados.push({
+                        regionNombre: columnas[0],
+                        codigoRegion: columnas[1],
+                        periodo: columnas[2],
+                        energiaUtilizada: parseFloat(columnas[3])
+                    });
+                }
+            });
+            return datosProcesados;
+        }
+
+        function actualizarSelectorRegiones() {
+            const selector = document.getElementById('filtroRegion');
+            selector.innerHTML = '<option value="">Escoge una región</option>';
+
+            regionesUnicas.forEach(region => {
+                const opcion = document.createElement('option');
+                opcion.value = region;
+                opcion.textContent = region;
+                selector.appendChild(opcion);
+            });
+        }
+
+        function construirGrafico(regionSeleccionada) {
+            const datosRegion = datosTotales.filter(item => item.regionNombre === regionSeleccionada);
+
+            if (datosRegion.length === 0) {
+                alert('No hay datos disponibles para la región seleccionada.');
+                return;
+            }
+
+            const periodos = datosRegion.map(item => item.periodo);
+            const consumos = datosRegion.map(item => item.energiaUtilizada);
+
+            if (graficoTorta) {
+                graficoTorta.destroy();
+            }
+
+            const contexto = document.getElementById('pieChart').getContext('2d');
+            graficoTorta = new Chart(contexto, {
+                type: 'pie',
+                data: {
+                    labels: periodos,
+                    datasets: [{
+                        label: 'Distribución de Energía',
+                        data: consumos,
+                        backgroundColor: [
+                            '#ba68c8', '#ce93d8', '#e1bee7', '#f3e5f5', '#9c27b0'
+                        ],
+                        borderColor: '#6a1b9a',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        }
+
+        function obtenerDatosCSV() {
+            fetch('graficoArea.csv')
+                .then(respuesta => respuesta.text())
+                .then(texto => {
+                    datosTotales = analizarCSV(texto);
+                    regionesUnicas = [...new Set(datosTotales.map(item => item.regionNombre))];
+                    actualizarSelectorRegiones();
+                })
+                .catch(error => {
+                    console.error('Error al cargar el archivo CSV:', error);
+                    alert('No se pudo cargar el archivo CSV.');
+                });
+        }
+
+        function mostrarGrafico() {
+            const regionSeleccionada = document.getElementById('filtroRegion').value;
+            if (regionSeleccionada) {
+                construirGrafico(regionSeleccionada);
+            }
+        }
+    </script>
+</body>
+</html>

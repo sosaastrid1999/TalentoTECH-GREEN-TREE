@@ -1,0 +1,148 @@
+/* 🌞 Animación del fondo: efecto de amanecer */
+@keyframes amanecer {
+    0% { background: #ff8800; }
+    50% { background: #ffcc33; }
+    100% { background: #ffdd55; }
+}
+
+body {
+    font-family: 'george';
+    background: linear-gradient(to bottom, #ffcc33, #ff9933, #ff6600);
+    animation: amanecer 8s infinite alternate; /* El fondo cambia de color suavemente */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    transition: background 1s ease-in-out;
+}
+
+/* 🌟 Animación para que la tabla aparezca con un fade-in */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Encabezado */
+h1 {
+    color: #fff;
+    font-size: 2.5em;
+    margin-top: 20px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ☀️ Contenedor de la tabla con efecto de aparición */
+.tabla-container {
+    width: 70%;
+    max-height: 350px;
+    overflow-y: auto;
+    border: 3px solid #ffaa00;
+    border-radius: 12px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.9);
+    margin: 30px auto;
+    padding: 10px;
+    opacity: 0;
+    animation: aparecer 1.5s ease-out forwards;
+}
+
+/* Estilos para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 🔥 Animación en hover de filas (brillo) */
+@keyframes brillo {
+    from {
+        background-color: #ffeb99;
+        box-shadow: none;
+    }
+    to {
+        background-color: #ffdd55;
+        box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+    }
+}
+
+/* Celdas */
+th, td {
+    border: 1px solid #ddd;
+    padding: 14px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+/* Estilos para los encabezados */
+th {
+    background: linear-gradient(to bottom, #ffaa00, #ff8800);
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Efecto al pasar el mouse por las filas */
+tr:hover {
+    animation: brillo 0.5s alternate infinite;
+}
+
+/* Alternar colores de filas */
+tr:nth-child(even) {
+    background-color: #fffcdb;
+}
+
+/* 🎇 Botón con animación de pulso */
+@keyframes pulso {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 165, 0, 0.8); }
+    100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+}
+
+.boton {
+    background: linear-gradient(to right, #ffcc33, #ff9900);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    animation: pulso 2s infinite;
+}
+
+.boton:hover {
+    background: linear-gradient(to right, #ffdd55, #ff6600);
+    transform: scale(1.05);
+}
+
+/* ☀️ Icono solar animado */
+@keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.energia-icono {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #ffcc33, #ff6600);
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 15px;
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+    animation: girar 8s linear infinite;
+}
+
+
+
+
+

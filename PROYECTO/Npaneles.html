@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREEN TREE</title>
+    <link rel="stylesheet" href="style.css">
+   <link rel ="calculadora" href="calculadora.js">
+    
+</head>
+<center>
+    <h1>Calculadora de Paneles Solares</h1>
+</center>
+<style>
+    body {
+        display: block;
+        justify-content:center; 
+        align-items: center; 
+        height: 100vh; 
+        margin: 0; 
+        background: linear-gradient(to bottom, #bcf8ce, #79da89, #43f57e);
+    }
+
+    .h1{
+        font-family: 'george';
+        color: rgb(248, 248, 255);
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: row; 
+        gap: 20px; 
+        align-items: left; 
+        position: relative;
+        width: 100%;
+        max-width: 900px; 
+        margin: 0 auto;
+    }
+    .item {
+        display: flex;
+        flex-direction: row;
+        margin-left: 1;
+    }
+
+    .ultimo {
+       flex-grow: 0; 
+       width: 30%; 
+       display: block;
+       align-items: left;
+    }
+    #tv-options {
+        margin-left: 0; 
+    }
+    
+    #lighting-options{
+        margin-left: 0;
+    }
+
+    #internetCommunication-options{
+        margin-left: 0;
+    }
+
+    #computers-options{
+        margin-left: 0;
+    }
+
+    #kitchenItems-options{
+        margin-left: 0;
+    }
+
+    label {
+        margin-right: 10px; 
+    }
+
+    select {
+        padding: 8px;
+        font-size: 16px;
+    }
+  
+    .seleccion-categoria{
+        width: 200px;
+        height: 50px;
+    }
+   
+    #selectedItemsList {
+      position: fixed;
+      bottom: 20px; 
+      left: 50%;  
+      transform: translateX(-50%); 
+   
+      padding: 10px;
+      width: 300px; 
+      max-height: 200px; 
+      overflow-y:visible; 
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+
+
+ #itemList {
+    position:relative;
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0; 
+    max-height: 400px; 
+    overflow-y: auto; 
+}
+
+#itemList li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #c4eccb;
+    border: 1px solid #30af5a;
+    border-radius: 4px; 
+    transition: background-color 0.3s ease; 
+}
+
+#itemList li:hover {
+    background-color: #80c28b; 
+}
+
+
+</style>
+
+<body> 
+<center>
+  <nav>
+    <ul>
+        <a href="pagprincipal.html">Inicio</a>
+        <a href="calculadora3.html">calculadora TW</a>
+    </ul>
+ </nav>
+</center> 
+<div class="form-container"> 
+    <div class="item">
+       
+ 
+        <label for="category">Categoría:</label>
+        <select class="seleccion-categoria" id="category" name="category" onchange="showSubcategory()" required> 
+            <option value="" disabled selected>Seleccione una opción</option> 
+            <option value="television">Televisores</option>
+            <option value="Iluminación">Iluminación</option>
+            <option value="Internet y Comunicación">Internet y Comunicación</option>
+            <option value="computadoras">Computadoras</option>
+            <option value="Elementos de cocina">Elementos de Cocina</option>
+        </select>
+     
+  </div>
+        <br><br><br>
+     
+        <div id="tv-options" style="display:none;">
+            <label for="tv-type">Tipo de Televisor:</label>
+            <select id="tv-type" name="tv-type" onchange="showTVDetails()">
+                <option value="" disabled selected>Seleccione un tipo de televisor</option>
+             <option value="barrigon-14-17">TV Barrigón de 14" a 17"</option>
+             <option value="barrigon-25-32">TV Barrigón de 25" a 32"</option>
+             <option value="led-less-32">TV LED de menos de 32"</option>
+             <option value="led-38-plus">TV LED de más de 38"</option>
+            </select>
+        </div>
+         <br>
+
+        <div id="lighting-options" style="display:none;">
+         <label for="lighting-type">Tipo de Iluminación:</label>
+         <select id="lighting-type" name="lighting-type" onchange="showLightingDetails()">
+              <option value="" disabled selected>Seleccione un tipo de iluminación</option>
+              <option value="led-bulb">Bombilla LED</option>
+              <option value="fluorescent-bulb">Bombilla Fluorescente</option>
+              <option value="incandescent-bulb">Bombilla Incandescente</option>
+         </select>
+        </div>
+        <br>
+
+
+        <div id="internetCommunication-options" style="display:none;">
+            <label for="internetCommunication-type">Tipo de internet communication</label>
+            <select id="internetCommunication-type" name="internetCommunication-type"onchange="showinternetCommunicationDetails()">
+                <option value="" disabled selected>Seleccione un tipo de internet y communicación</option>
+                <option value="phone">Celular</option>
+                <option value="internet">Router Internet</option>
+            </select>
+        </div>
+        <br>
+
+        <div id="computers-options" style="display:none;">
+            <label for="computers-type">Tipos de computadores</label>
+            <select id="computers-type" name="computers-type" onchange="showcomputersDetails()">
+                <option value="" disabled selected>Seleccione un tipo de computadores</option>
+                <option value="laptop">Portatil</option>
+                <option value="desktop-computer">Computador de mesa</option>
+                <option value="sound-equipment">Equipo de Sonido</option>
+            </select>
+        </div>
+        <br>
+
+        <div id="kitchenItems-options" style="display:none;">
+            <label for="kitchenItems-type">Tipos de Elementos de Cocina</label>
+            <select id="kitchenItems-type" name="kitchenItems-type" onchange="showkitchenItemsDetails()">
+                <option value="" disabled selected>Seleccione un tipo de Elementos de Cocina</option>
+                <option value="riceCooker">Olla arrocera</option>
+                <option value="blender">Licuadora</option>
+                <option value="microwave">Microondas</option>
+            </select>
+        </div>
+    
+   
+    <div class="item ultimo">
+ 
+        <div id="details" style="display:none;">
+            <div class="input-container">
+                <label for="power">Potencia (Watts):</label>
+                <input type="number" id="power" name="power" value= 0 readonly>
+            </div>
+            <div class="input-container">
+                <label for="quantity">Cantidad:</label>
+                <input type="number" id="quantity" name="quantity" value=0 readonly>
+            </div>
+            <div class="input-container">
+                <label for="usage">Horas de Uso:</label>
+                <input type="number" id="usage" name="usage" value=0 readonly>
+            </div>
+        </div>
+        <script src="calculadora.js"></script>
+    </div>
+</div>
+
+<center>
+<button id="addToListButton" onclick="addToList()">Agregar a la lista</button>
+
+</center>
+
+<center>
+<p id="totalPower">Potencia total: 0W</p>
+
+
+   
+    <div><form id="formulario">
+        <label for="horaspico">Horas pico solares:</label>
+        <input type="number" id="horaspico" value="0">
+        <br><br>
+
+        <label for="consumodiario">Consumo Diario:</label>
+        <input type="number" id="consumodiario" value="0">
+        <br>
+        <p>Esta calculadora utiliza de referencia los paneles monocristalinos</p>
+
+        <button type="button" onclick="sumar()">calcular</button> 
+
+        <br>
+
+        <h3>Resultado: <span id="resultado">0</span></h3>
+        <br><br>
+    </form></div>
+   <br><br>
+    <script src="calculadora.js">
+         
+    
+</script>
+</center>
+<left>
+    <div id="selectedItemsList"></div>
+  <h3>Lista de elementos seleccionados:</h3>
+  <ul id="itemList"></ul>
+</div>
+</left>
+</body>
+</html>
+
+ 
